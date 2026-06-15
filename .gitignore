@@ -1,0 +1,21 @@
+# Android Studio and Gradle
+.idea/
+*.iml
+.gradle/
+build/
+**/build/
+local.properties
+
+# Generated and local Android files
+captures/
+.externalNativeBuild/
+.cxx/
+**/debug/*.apk
+google-services.json
+
+# The practice repository intentionally excludes the binary wrapper archive.
+gradle/wrapper/gradle-wrapper.jar
+
+# Operating systems
+.DS_Store
+Thumbs.db
