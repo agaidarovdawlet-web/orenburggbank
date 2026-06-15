@@ -114,6 +114,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /** Заполняет новую базу начальными системами для демонстрации приложения. */
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun populateInitialData(db: SQLiteDatabase) {
         listOf(
             arrayOf("abs", "АБС", "Автоматизированная банковская система", "approver", "deputy", "CRITICAL", """["dwh","dbo"]"""),
@@ -138,6 +139,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     /** Переносит legacy-таблицы версии 2 в нормализованную схему версии 3 транзакционно. */
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun migrateToV3(db: SQLiteDatabase) {
         db.beginTransaction()
         try {

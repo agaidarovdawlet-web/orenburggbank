@@ -168,27 +168,41 @@ class WorkRepository(
         return cursor.use { generateSequence { if (it.moveToNext()) cursorToHistory(it) else null }.toList() }
     }
 
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
+
     private fun fetchAllSystems(): List<SystemEntity> = queryAll(DatabaseHelper.TABLE_SYSTEMS, ::cursorToSystem)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchAllDelegations(): List<DelegationEntity> = queryAll(DatabaseHelper.TABLE_DELEGATIONS, ::cursorToDelegation)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchAllWorks(): List<WorkWithApprovals> = queryAll(DatabaseHelper.TABLE_WORKS, ::cursorToWork).map { work ->
         WorkWithApprovals(work, fetchApprovalsForWork(work.id), fetchSystemById(work.systemId) ?: unknownSystem(work.systemId))
     }
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchApprovalsForWork(workId: Long): List<ApprovalEntity> =
         query(DatabaseHelper.TABLE_APPROVALS, "${DatabaseHelper.COL_APP_WORK_ID} = ?", arrayOf(workId.toString()), ::cursorToApproval)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchSystemById(id: String) = queryOne(DatabaseHelper.TABLE_SYSTEMS, DatabaseHelper.COL_SYS_ID, id, ::cursorToSystem)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchWorkById(id: Long) = queryOne(DatabaseHelper.TABLE_WORKS, DatabaseHelper.COL_WORK_ID, id.toString(), ::cursorToWork)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchApprovalById(id: Long) = queryOne(DatabaseHelper.TABLE_APPROVALS, DatabaseHelper.COL_APP_ID, id.toString(), ::cursorToApproval)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun fetchDelegationById(id: Long) = queryOne(DatabaseHelper.TABLE_DELEGATIONS, DatabaseHelper.COL_DEL_ID, id.toString(), ::cursorToDelegation)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun activeDelegation(systemId: String, approverId: String): DelegationEntity? {
         val now = LocalDateTime.now().toString()
         return fetchAllDelegations().firstOrNull { it.systemId == systemId && it.approverId == approverId && now in it.dateFrom..it.dateTo }
     }
+
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
 
     private fun updateWorkStatus(db: SQLiteDatabase, workId: Long) {
         db.update(DatabaseHelper.TABLE_WORKS, ContentValues().apply {
             put(DatabaseHelper.COL_WORK_STATUS, WorkStatusResolver.resolve(fetchApprovalsForWork(workId)))
         }, "${DatabaseHelper.COL_WORK_ID} = ?", arrayOf(workId.toString()))
     }
+
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
 
     private fun insertApproval(db: SQLiteDatabase, workId: Long, systemId: String, approverId: String, deputyId: String?) {
         db.insertOrThrow(DatabaseHelper.TABLE_APPROVALS, null, ContentValues().apply {
@@ -199,11 +213,14 @@ class WorkRepository(
         })
     }
 
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
+
     private fun systemValues(s: SystemEntity) = ContentValues().apply {
         put(DatabaseHelper.COL_SYS_ID, s.id); put(DatabaseHelper.COL_SYS_NAME, s.name); put(DatabaseHelper.COL_SYS_DESC, s.description)
         put(DatabaseHelper.COL_SYS_APPROVER, s.approverId); put(DatabaseHelper.COL_SYS_DEPUTY, s.deputyId)
         put(DatabaseHelper.COL_SYS_LEVEL, s.criticality.name); put(DatabaseHelper.COL_SYS_DEPS, json.encodeToString(s.dependentSystemIds))
     }
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun workValues(w: WorkEntity) = ContentValues().apply {
         put(DatabaseHelper.COL_WORK_TITLE, w.title); put(DatabaseHelper.COL_WORK_DATE, w.date); put(DatabaseHelper.COL_WORK_START, w.timeStart)
         put(DatabaseHelper.COL_WORK_END, w.timeEnd); put(DatabaseHelper.COL_WORK_SYS_ID, w.systemId); put(DatabaseHelper.COL_WORK_ENGINEER, w.engineerName)
@@ -211,41 +228,60 @@ class WorkRepository(
         put(DatabaseHelper.COL_WORK_OWNER, w.ownerUsername); put(DatabaseHelper.COL_WORK_START_DT, w.startDateTime); put(DatabaseHelper.COL_WORK_END_DT, w.endDateTime)
         put(DatabaseHelper.COL_WORK_AFFECTED, json.encodeToString(w.affectedSystemIds))
     }
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun delegationValues(d: DelegationEntity) = ContentValues().apply {
         put(DatabaseHelper.COL_DEL_SYS_ID, d.systemId); put(DatabaseHelper.COL_DEL_APPROVER_ID, d.approverId); put(DatabaseHelper.COL_DEL_DEPUTY_ID, d.deputyId)
         put(DatabaseHelper.COL_DEL_FROM, d.dateFrom); put(DatabaseHelper.COL_DEL_TO, d.dateTo); put(DatabaseHelper.COL_DEL_REASON, d.reason); put(DatabaseHelper.COL_DEL_CREATED, d.createdAt)
     }
 
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
+
     private fun cursorToSystem(c: Cursor) = SystemEntity(c.string(DatabaseHelper.COL_SYS_ID), c.string(DatabaseHelper.COL_SYS_NAME), c.string(DatabaseHelper.COL_SYS_DESC),
         c.string(DatabaseHelper.COL_SYS_APPROVER), c.string(DatabaseHelper.COL_SYS_DEPUTY), Criticality.valueOf(c.string(DatabaseHelper.COL_SYS_LEVEL)),
         decodeList(c.string(DatabaseHelper.COL_SYS_DEPS)))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun cursorToWork(c: Cursor) = WorkEntity(c.long(DatabaseHelper.COL_WORK_ID), c.string(DatabaseHelper.COL_WORK_TITLE), c.string(DatabaseHelper.COL_WORK_DATE),
         c.string(DatabaseHelper.COL_WORK_START), c.string(DatabaseHelper.COL_WORK_END), c.string(DatabaseHelper.COL_WORK_SYS_ID), c.string(DatabaseHelper.COL_WORK_ENGINEER),
         c.string(DatabaseHelper.COL_WORK_DESC), c.string(DatabaseHelper.COL_WORK_ROLLBACK), c.string(DatabaseHelper.COL_WORK_STATUS), c.string(DatabaseHelper.COL_WORK_OWNER),
         c.string(DatabaseHelper.COL_WORK_START_DT), c.string(DatabaseHelper.COL_WORK_END_DT), decodeList(c.string(DatabaseHelper.COL_WORK_AFFECTED)))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun cursorToApproval(c: Cursor) = ApprovalEntity(c.long(DatabaseHelper.COL_APP_ID), c.long(DatabaseHelper.COL_APP_WORK_ID),
         "Согласующий ${c.string(DatabaseHelper.COL_APP_SYS_ID)}", c.string(DatabaseHelper.COL_APP_APPROVER_ID), c.string(DatabaseHelper.COL_APP_STATUS),
         c.string(DatabaseHelper.COL_APP_SYS_ID), c.nullable(DatabaseHelper.COL_APP_DELEGATED_TO) != null, c.nullable(DatabaseHelper.COL_APP_DELEGATED_TO) ?: c.string(DatabaseHelper.COL_APP_APPROVER_ID),
         c.string(DatabaseHelper.COL_APP_APPROVER_ID), c.nullable(DatabaseHelper.COL_APP_DELEGATED_TO), c.string(DatabaseHelper.COL_APP_COMMENT), c.nullable(DatabaseHelper.COL_APP_APPROVED_AT))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun cursorToDelegation(c: Cursor) = DelegationEntity(c.long(DatabaseHelper.COL_DEL_ID), c.string(DatabaseHelper.COL_DEL_SYS_ID), c.string(DatabaseHelper.COL_DEL_APPROVER_ID),
         c.string(DatabaseHelper.COL_DEL_DEPUTY_ID), c.string(DatabaseHelper.COL_DEL_FROM), c.string(DatabaseHelper.COL_DEL_TO), c.string(DatabaseHelper.COL_DEL_REASON), c.string(DatabaseHelper.COL_DEL_CREATED))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun cursorToHistory(c: Cursor) = HistoryEntity(c.long(DatabaseHelper.COL_HIST_ID), c.long(DatabaseHelper.COL_HIST_WORK_ID), c.string(DatabaseHelper.COL_HIST_ACTION),
         c.string(DatabaseHelper.COL_HIST_PERIOD), c.string(DatabaseHelper.COL_HIST_REASON), c.string(DatabaseHelper.COL_HIST_DATE))
 
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
+
     private fun <T> queryAll(table: String, mapper: (Cursor) -> T) = query(table, null, null, mapper)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun <T> query(table: String, selection: String?, args: Array<String>?, mapper: (Cursor) -> T): List<T> =
         dbHelper.readableDatabase.query(table, null, selection, args, null, null, null).use { c ->
             buildList { while (c.moveToNext()) add(mapper(c)) }
         }
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun <T> queryOne(table: String, column: String, value: String, mapper: (Cursor) -> T): T? =
         query(table, "$column = ?", arrayOf(value), mapper).firstOrNull()
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun decodeList(value: String): List<String> = runCatching { json.decodeFromString<List<String>>(value) }.getOrDefault(emptyList())
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun unknownSystem(id: String) = SystemEntity(id, "Неизвестная система", "", "", "", Criticality.LOW, emptyList())
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun Cursor.string(column: String) = getString(getColumnIndexOrThrow(column)) ?: ""
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun Cursor.nullable(column: String) = getString(getColumnIndexOrThrow(column))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun Cursor.long(column: String) = getLong(getColumnIndexOrThrow(column))
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun requireUpdated(rows: Int) = check(rows == 1) { "Запись не найдена" }
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private fun storageException(e: SQLiteException) = IllegalStateException(if (e is SQLiteDatabaseLockedException) "База данных занята" else "Ошибка локальной базы данных", e)
+    /** Внутренняя операция слоя данных: преобразует или извлекает данные без обхода проверок репозитория. */
     private inline fun <T> transaction(db: SQLiteDatabase, block: () -> T): T {
         db.beginTransaction()
         return try { block().also { db.setTransactionSuccessful() } } catch (e: SQLiteException) { throw storageException(e) } finally { db.endTransaction() }
