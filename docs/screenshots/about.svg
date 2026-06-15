@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="864" viewBox="0 0 432 864">
+  <rect width="432" height="864" fill="#F5F8FA"/>
+  <rect x="24" y="145" width="384" height="574" rx="20" fill="#FFFFFF" stroke="#E5E7EB"/>
+  <g transform="translate(216 222) rotate(45)">
+    <rect x="-36" y="-36" width="72" height="72" rx="10" fill="#0088CC"/>
+    <text x="0" y="13" text-anchor="middle" font-family="Arial" font-size="42" font-weight="bold" fill="#FFFFFF" transform="rotate(-45)">О</text>
+  </g>
+  <text x="216" y="310" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold" fill="#0088CC">Портал техработ</text>
+  <text x="216" y="346" text-anchor="middle" font-family="Arial" font-size="15" fill="#6B7280">Версия 3.0.0</text>
+  <line x1="60" y1="374" x2="372" y2="374" stroke="#E5E7EB"/>
+  <text x="216" y="422" text-anchor="middle" font-family="Arial" font-size="16" fill="#1A1A2E">Автор: Агайдаров Даулет Азаматович</text>
+  <text x="216" y="462" text-anchor="middle" font-family="Arial" font-size="16" fill="#1A1A2E">Студент группы 23 КСК 4</text>
+  <text x="216" y="502" text-anchor="middle" font-family="Arial" font-size="16" fill="#1A1A2E">Университетский колледж ОГУ</text>
+  <text x="216" y="550" text-anchor="middle" font-family="Arial" font-size="15" fill="#1A1A2E">Производственная практика в</text>
+  <text x="216" y="576" text-anchor="middle" font-family="Arial" font-size="15" fill="#1A1A2E">АО «БАНК ОРЕНБУРГ»</text>
+  <text x="216" y="630" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#0088CC">2026</text>
+  <rect x="0" y="800" width="432" height="64" fill="#FFFFFF"/>
+  <circle cx="44" cy="832" r="5" fill="#6B7280"/><circle cx="130" cy="832" r="5" fill="#6B7280"/>
+  <circle cx="216" cy="832" r="5" fill="#6B7280"/><circle cx="302" cy="832" r="5" fill="#6B7280"/>
+  <circle cx="388" cy="832" r="7" fill="#0088CC"/>
+</svg>
