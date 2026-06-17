@@ -29,6 +29,7 @@
 | `admin` | `admin` | Администратор |
 | `technician` | `tech` | Техник |
 | `viewer` | `view` | Просмотр |
+
 Дополнительные учебные учётные записи: `approver/approver`, `deputy/deputy`,
 `author/author`, `maintainer/maintainer`. Роль определяется учётной записью;
 начальная роль до входа — `VIEWER`.
