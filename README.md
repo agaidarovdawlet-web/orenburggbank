@@ -13,15 +13,6 @@
 Доступ к действиям ограничен матрицей ролей и принадлежностью заявки или
 системы. UI выполнен на Jetpack Compose в фирменной сине-бирюзовой палитре и
 поддерживает светлую и тёмную темы.
-
-## Демонстрация
-
-| Вход | Список работ | О приложении |
-|---|---|---|
-| ![Вход](docs/screenshots/login.png) | ![Список](docs/screenshots/works.png) | ![О приложении](docs/screenshots/about.png) |
-
-Видео-демонстрация: [docs/demo.gif](docs/demo.gif)
-
 ## Возможности
 
 - справочник систем с критичностью, согласующим, заместителем и зависимостями;
@@ -38,13 +29,10 @@
 | `admin` | `admin` | Администратор |
 | `technician` | `tech` | Техник |
 | `viewer` | `view` | Просмотр |
-
 Дополнительные учебные учётные записи: `approver/approver`, `deputy/deputy`,
 `author/author`, `maintainer/maintainer`. Роль определяется учётной записью;
 начальная роль до входа — `VIEWER`.
-
 ## Архитектура
-
 ```mermaid
 flowchart LR
     UI[Compose UI + Navigation] --> VM[WorkViewModel]
@@ -54,12 +42,9 @@ flowchart LR
     CONTRACT --> REPO[WorkRepository]
     REPO --> DB[(SQLiteOpenHelper)]
 ```
-
 Зависимости создаются вручную в `AppContainer` и передаются через
 конструкторы. Подробности: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
 ## Матрица ролей
-
 | Действие | Согласующий | ЗамС | Автор | Просмотр | Админ | Ведение справочников |
 |---|---:|---:|---:|---:|---:|---:|
 | Согласование техработ | ✓ | ✓ |  |  | ✓ |  |
@@ -69,11 +54,8 @@ flowchart LR
 | Отмена техработ | ✓ | ✓ | ✓ |  | ✓ |  |
 | Просмотр справочников | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Изменение справочников |  |  |  |  | ✓ | ✓ |
-
 Права согласования и отмены дополнительно ограничены затронутыми системами.
-
 ## Структура
-
 ```text
 app/src/main/java/com/example/orenburggbank/
 ├── data/          # SQLite, репозиторий и сущности
@@ -84,7 +66,6 @@ app/src/main/java/com/example/orenburggbank/
 └── viewmodel/     # состояние UI
 docs/              # архитектура, соответствие ТЗ, скриншоты
 ```
-
 ## Установка и запуск
 
 Требуются Android Studio, JDK 17 и Android SDK 34.
